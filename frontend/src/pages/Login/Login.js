@@ -10,6 +10,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import CustomAlert from '../../components/CustomAlert';
 
 const defaultTheme = createTheme({
     palette: {
@@ -20,13 +21,14 @@ const defaultTheme = createTheme({
 });
 
 export default function SignIn() {
+    const [showAlert, setShowAlert] = React.useState(false)
     const handleSubmit = (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
         console.log({
-            email: data.get('email'),
-            password: data.get('password'),
+            nick: data.get('nick'),
         });
+        setShowAlert(true);
     };
 
     return (
@@ -36,9 +38,12 @@ export default function SignIn() {
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    minHeight: '100vh', 
+                    minHeight: '100vh',
                 }}
             >
+
+                <CustomAlert severity="success" message="You have successfully signed in!" showAlert={showAlert} setShowAlert={setShowAlert} />
+
                 <Container component="main" maxWidth="xs">
                     <CssBaseline />
                     <Box
@@ -86,7 +91,6 @@ export default function SignIn() {
                     </Box>
                 </Container>
             </Box>
-
         </ThemeProvider>
     );
 }

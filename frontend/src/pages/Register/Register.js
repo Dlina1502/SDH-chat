@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useCallback, useState, useContext } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -10,6 +10,8 @@ import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import CustomAlert from '../../components/CustomAlert';
+import { AuthContext } from '../../context/AuthContext';
 
 const defaultTheme = createTheme({
     palette: {
@@ -20,13 +22,34 @@ const defaultTheme = createTheme({
 });
 
 export default function SignUp() {
-    const handleSubmit = (event) => {
+    const { registerUserData, updateRegisterUser, registerUser } = useContext(AuthContext)
+    const [showAlert, setShowAlert] = useState(false)
+    const [messageAlert, setMessageAlert] = useState("")
+    const [severityAlert, setSeverityAlert] = useState("")
+   
+    const handleSubmit = async (event) => {
         event.preventDefault();
-        const data = new FormData(event.currentTarget);
-        console.log({
-            email: data.get('email'),
-            password: data.get('password'),
-        });
+        const response = await registerUser();
+
+        if (response && response.error) {
+            setSeverityAlert("error")
+            console.log(response)
+            setMessageAlert(response.message)
+        } else {
+            setSeverityAlert("success")
+            console.log(response)
+            setMessageAlert(response.message)
+        }
+        
+        setShowAlert(true)
+    };
+
+    const handleInputChange = (event) => {
+        const { name, value } = event.target;
+        updateRegisterUser(prevState => ({
+            ...prevState,
+            [name]: value
+        }));
     };
 
     return (
@@ -36,9 +59,11 @@ export default function SignUp() {
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    minHeight: '100vh', 
+                    minHeight: '100vh',
                 }}
             >
+                <CustomAlert severity={severityAlert} message={messageAlert} showAlert={showAlert} setShowAlert={setShowAlert} />
+
                 <Container component="main" maxWidth="xs">
                     <CssBaseline />
                     <Box
@@ -66,6 +91,7 @@ export default function SignUp() {
                                 name="nick"
                                 label="Nick name"
                                 id="nick"
+                                onChange={handleInputChange}
                             />
                             <TextField
                                 margin="normal"
@@ -74,6 +100,7 @@ export default function SignUp() {
                                 name="name"
                                 label="Name"
                                 id="name"
+                                onChange={handleInputChange}
                             />
                             <Button
                                 type="submit"
