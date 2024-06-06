@@ -13,10 +13,8 @@ function App() {
     <Router>
       <div className="App">
         <Routes>
-          {/* <Route path="/" element={user? <Chat /> : <SignIn />} />  */}
-          <Route path="/" element={<SignIn />} /> 
-          {/* <Route path="/register" element={user? <Chat /> : <SignUp />} /> */}
-          <Route path="/register" element={ <SignUp />} />
+          <Route path="/" element={user? <Chat /> : <SignIn />} /> 
+          <Route path="/register" element={user? <Chat /> : <SignUp />} />
           <Route path="/chat" element={user? <Chat /> : <SignIn />} />
         </Routes>
       </div>

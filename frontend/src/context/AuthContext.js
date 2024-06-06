@@ -1,5 +1,5 @@
 import React, { createContext, useCallback, useEffect, useState } from 'react';
-import { registerUserRequest } from '../services/services';
+import { loginUserRequest, registerUserRequest } from '../services/services';
 
 export const AuthContext = createContext();
 
@@ -11,11 +11,16 @@ export const AuthProvider = ({ children }) => {
         name: "",
         nick: "",
     })
+    const [loginUserData, setLoginUserData]  = useState({
+        nick: ""
+    })
 
     useEffect(() => {
         const user = localStorage.getItem("User")
         setUser(JSON.parse(user))
     }, [])
+
+    //Register
 
     const updateRegisterUser = useCallback((data) => {
         setRegisterUserData(data)
@@ -23,20 +28,44 @@ export const AuthProvider = ({ children }) => {
     
     const registerUser = useCallback(async() => {
         setIsRegisterLoading(true)
-
         const response = await registerUserRequest(registerUserData)
         setIsRegisterLoading(false)
         if(response.error){
             return response
         }else{
-            localStorage.setItem("User", JSON.stringify(response))
-            setUser(response)
+            localStorage.setItem("User", JSON.stringify(response.data))
+            setUser(response.data)
             return response
         }
     }, [registerUserData])
+
+    //Login
+
+    const loginUser = useCallback(async() => {
+
+        const response = await loginUserRequest(loginUserData)
+        if(response.error){
+            return response
+        }else{
+            localStorage.setItem("User", JSON.stringify(response.data))
+            setUser(response.data)
+            return response
+        }
+    }, [loginUserData])
+
+    const updateLoginUser = useCallback((data) => {
+        setLoginUserData(data)
+    }, [])
+
+    //Logout 
+
+    const logoutUser = useCallback(() => {
+        localStorage.removeItem("User")
+        setUser(null)
+    }, [])
     
     return (
-        <AuthContext.Provider value={{ user, registerUserData, updateRegisterUser, registerUser }}>
+        <AuthContext.Provider value={{ user, registerUserData, loginUserData, updateRegisterUser, registerUser, logoutUser, loginUser, updateLoginUser }}>
             {children}
         </AuthContext.Provider>
     );

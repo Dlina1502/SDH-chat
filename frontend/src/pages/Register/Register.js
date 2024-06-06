@@ -47,6 +47,7 @@ export default function SignUp() {
                 setMessageAlert(response.message)
             }
             setShowAlert(true)
+            window.location.href = "/chat";
         }
     };
 

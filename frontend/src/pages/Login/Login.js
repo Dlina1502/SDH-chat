@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { createContext, useCallback, useEffect, useState, useContext } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -11,6 +11,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import CustomAlert from '../../components/CustomAlert';
+import { AuthContext } from '../../context/AuthContext';
 
 const defaultTheme = createTheme({
     palette: {
@@ -21,14 +22,41 @@ const defaultTheme = createTheme({
 });
 
 export default function SignIn() {
-    const [showAlert, setShowAlert] = React.useState(false)
-    const handleSubmit = (event) => {
+    const [loginData, setLoginData] = useState()
+    const { loginUserData, updateLoginUser, loginUser } = useContext(AuthContext)
+    const [showAlert, setShowAlert] = useState(false)
+    const [messageAlert, setMessageAlert] = useState("")
+    const [severityAlert, setSeverityAlert] = useState("")
+
+    const handleInputChange = (event) => {
+        const { name, value } = event.target;
+        updateLoginUser(prevState => ({
+            ...prevState,
+            [name]: value
+        }));
+    };
+
+    const handleSubmit = async (event) => {
         event.preventDefault();
-        const data = new FormData(event.currentTarget);
-        console.log({
-            nick: data.get('nick'),
-        });
-        setShowAlert(true);
+        if (!loginUserData.nick || !loginUserData) {
+            setSeverityAlert("error");
+            setMessageAlert("All fields are required");
+            setShowAlert(true)
+            return;
+        } else {
+            const response = await loginUser();
+            if (response && response.error) {
+                setSeverityAlert("error")
+                console.log(response)
+                setMessageAlert(response.message)
+            } else {
+                setSeverityAlert("success")
+                console.log(response)
+                setMessageAlert(response.message)
+            }
+            setShowAlert(true)
+            window.location.href = "/chat";
+        }
     };
 
     return (
@@ -42,7 +70,7 @@ export default function SignIn() {
                 }}
             >
 
-                <CustomAlert severity="success" message="You have successfully signed in!" showAlert={showAlert} setShowAlert={setShowAlert} />
+                <CustomAlert severity={severityAlert} message={messageAlert} showAlert={showAlert} setShowAlert={setShowAlert} />
 
                 <Container component="main" maxWidth="xs">
                     <CssBaseline />
@@ -71,6 +99,7 @@ export default function SignIn() {
                                 name="nick"
                                 label="Nick name"
                                 id="nick"
+                                onChange={handleInputChange}
                             />
                             <Button
                                 type="submit"

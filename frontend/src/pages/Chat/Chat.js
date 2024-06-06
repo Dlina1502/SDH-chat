@@ -16,11 +16,14 @@ import Paper from '@mui/material/Paper';
 import Link from '@mui/material/Link';
 import TextField from '@mui/material/TextField';
 import LogoutIcon from '@mui/icons-material/Logout';
+import SendIcon from '@mui/icons-material/Send';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import Avatar from '@mui/material/Avatar';
+import { AuthContext } from '../../context/AuthContext';
+import SearchTextField from '../../components/Search';
 
-const drawerWidth = 360;
+const drawerWidth = 370;
 
 const mainListItems = (
     <React.Fragment>
@@ -56,6 +59,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 const defaultTheme = createTheme();
 
 export default function Chat() {
+    const { user, logoutUser } = React.useContext(AuthContext)
     const [open, setOpen] = React.useState(true);
 
     return (
@@ -79,7 +83,7 @@ export default function Chat() {
                 <Drawer variant="permanent"
                     PaperProps={{
                         style: {
-                            backgroundColor: '#3f51b5',
+                            backgroundColor: '#1976d2',
                         },
                     }}
                 >
@@ -93,19 +97,22 @@ export default function Chat() {
                     >
                         <Box sx={{ display: 'flex', alignItems: 'center' }}>
                             <Avatar sx={{ marginRight: '10px' }} src="" />
-                            <Typography
-                                variant="h6"
-                                color="white"
-                                noWrap
-                            >
-                                Chat
-                            </Typography>
+                            {user &&
+                                <Typography
+                                    variant="h6"
+                                    color="white"
+                                    noWrap
+                                >
+                                    {user?.name}
+                                </Typography>
+                            }
                         </Box>
-                        <IconButton color="inherit">
+                        <IconButton sx={{ color: 'white' }} onClick={() => logoutUser()} href='/' >
                             <LogoutIcon />
                         </IconButton>
                     </Toolbar>
                     <Divider />
+                    <SearchTextField />
                     <List component="nav" >
                         {mainListItems}
                     </List>
@@ -126,12 +133,14 @@ export default function Chat() {
                 >
                     <Container sx={{ mt: 12 }}>
                         {/* <Grid container spacing={3}>
-
-        </Grid> */}
+                        </Grid> */}
                     </Container>
                     <AppBar position="static" sx={{ bgcolor: '#ffffff', width: '100%', mt: 'auto', height: '80px' }}>
-                        <Toolbar>
-                            <TextField />
+                        <Toolbar sx={{ padding: '10px' }}>
+                            <TextField sx={{ margin: 'auto', width: '100%' }} />
+                            <IconButton size="large">
+                                <SendIcon color="primary" fontSize="medium" />
+                            </IconButton>
                         </Toolbar>
                     </AppBar>
                 </Box>
