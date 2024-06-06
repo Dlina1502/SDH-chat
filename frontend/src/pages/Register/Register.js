@@ -26,22 +26,28 @@ export default function SignUp() {
     const [showAlert, setShowAlert] = useState(false)
     const [messageAlert, setMessageAlert] = useState("")
     const [severityAlert, setSeverityAlert] = useState("")
-   
+
     const handleSubmit = async (event) => {
         event.preventDefault();
-        const response = await registerUser();
-
-        if (response && response.error) {
-            setSeverityAlert("error")
-            console.log(response)
-            setMessageAlert(response.message)
+        if (!registerUserData.nick || !registerUserData.name) {
+            setSeverityAlert("error");
+            setMessageAlert("All fields are required");
+            setShowAlert(true)
+            return;
         } else {
-            setSeverityAlert("success")
-            console.log(response)
-            setMessageAlert(response.message)
+            const response = await registerUser();
+
+            if (response && response.error) {
+                setSeverityAlert("error")
+                console.log(response)
+                setMessageAlert(response.message)
+            } else {
+                setSeverityAlert("success")
+                console.log(response)
+                setMessageAlert(response.message)
+            }
+            setShowAlert(true)
         }
-        
-        setShowAlert(true)
     };
 
     const handleInputChange = (event) => {

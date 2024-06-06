@@ -8,7 +8,7 @@ require("dotenv").config()
 
 app.use(express.json())
 app.use(cors())
-app.use("/api/users", userRoute)
+app.use("/api/user", userRoute)
 
 app.get("/api/resource", (req, res) => {
     // Implement logic to fetch resources from the database
