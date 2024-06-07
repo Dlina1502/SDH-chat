@@ -1,4 +1,4 @@
-import React, { createContext, useCallback, useEffect, useState, useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -22,7 +22,7 @@ const defaultTheme = createTheme({
 });
 
 export default function SignIn() {
-    const [loginData, setLoginData] = useState()
+    // const [loginData, setLoginData] = useState()
     const { loginUserData, updateLoginUser, loginUser } = useContext(AuthContext)
     const [showAlert, setShowAlert] = useState(false)
     const [messageAlert, setMessageAlert] = useState("")

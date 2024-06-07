@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useContext } from 'react';
 import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import MuiDrawer from '@mui/material/Drawer';
@@ -9,37 +9,17 @@ import List from '@mui/material/List';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
-import Badge from '@mui/material/Badge';
 import Container from '@mui/material/Container';
-import Grid from '@mui/material/Grid';
-import Paper from '@mui/material/Paper';
-import Link from '@mui/material/Link';
 import TextField from '@mui/material/TextField';
 import LogoutIcon from '@mui/icons-material/Logout';
 import SendIcon from '@mui/icons-material/Send';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemText from '@mui/material/ListItemText';
 import Avatar from '@mui/material/Avatar';
 import { AuthContext } from '../../context/AuthContext';
+import { ChatContext } from '../../context/ChatContext';
 import SearchTextField from '../../components/Search';
+import RecipientList from './components/RecipientList';
 
 const drawerWidth = 370;
-
-const mainListItems = (
-    <React.Fragment>
-        <ListItemButton>
-            <Avatar sx={{ marginRight: '10px' }} src="" />
-            <ListItemText primary="Luisa" sx={{ color: 'white' }} />
-        </ListItemButton>
-        <Divider />
-        <ListItemButton>
-            <Avatar sx={{ marginRight: '10px' }} src="" />
-            <ListItemText primary="Marta" sx={{ color: 'white' }} />
-        </ListItemButton>
-        <Divider />
-    </React.Fragment>
-);
-
 
 const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
     ({ theme }) => ({
@@ -59,9 +39,11 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 const defaultTheme = createTheme();
 
 export default function Chat() {
-    const { user, logoutUser } = React.useContext(AuthContext)
-    const [open, setOpen] = React.useState(true);
-
+    const {userChats, isUserChatsLoading} = useContext(ChatContext)
+    console.log(userChats)
+    const { user, logoutUser } = useContext(AuthContext)
+    // const [open, setOpen] = useState(true);
+    console.log(user)
     return (
         <ThemeProvider theme={defaultTheme}>
             <Box sx={{ display: 'flex' }}>
@@ -114,7 +96,7 @@ export default function Chat() {
                     <Divider />
                     <SearchTextField />
                     <List component="nav" >
-                        {mainListItems}
+                        <RecipientList chats={userChats} userId={user._id} chatsLoading={isUserChatsLoading}/>
                     </List>
                 </Drawer>
                 <Box
