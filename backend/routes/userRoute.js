@@ -8,6 +8,7 @@ router.post('/register', userController.registerUser)
 router.post('/login', userController.loginUser)
 
 // GET 
+router.get('/find/:id', userController.findUser)
 router.get('/', userController.getUsers)
 
 module.exports = router;

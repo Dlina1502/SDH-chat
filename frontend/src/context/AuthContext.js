@@ -5,7 +5,7 @@ export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null)
-    const [registerError, setRegisterError] = useState(null)
+    // eslint-disable-next-line
     const [isRegisterLoading, setIsRegisterLoading] = useState(false)
     const [registerUserData, setRegisterUserData]  = useState({
         name: "",

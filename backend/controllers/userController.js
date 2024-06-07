@@ -45,6 +45,16 @@ const userController = {
         } catch (error) {
             res.status(500).json({ error: 'An error occurred while fetching users' });
         }
+    },
+
+    findUser: async (req, res) => {
+        const userId = req.params.id;
+        try{
+            const user = await User.findById(userId);
+            res.status(200).json(user);
+        }catch(error){
+            res.status(500).json({ error: 'An error occurred while fetching user' });
+        }
     }
 };
 
