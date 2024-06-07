@@ -49,6 +49,20 @@ Before starting the application, make sure to follow these steps:
 
 ## Accessing the Application
 
-Once the servers are up and running, you can access the application through your web browser by visiting the URL provided by Azure. Note that the frontend is subject to changes to correctly display the message, so make sure you are using the updated version.
+Once the servers are up and running, you can access the application through your web browser by localhost. 
 
-That's it! The application should now be running in your local environment. If you encounter any issues, be sure to review the instructions again and verify your environment setup.
+# Deployment on Azure
+The application is currently deployed on Azure and is subject to changes, especially in the frontend to correctly display messages. Make sure to check the online version for the latest updates.
+
+## Built with
+- React: The web framework used
+- Node.js: Execution environment for JavaScript
+- Express: Web application infrastructure
+- Socket.io: Library for real-time web applications
+
+## Contributing
+Please read CONTRIBUTING.md for details on our code of conduct, and the process for submitting pull requests.
+
+## Authors
+Lina Marcel Duque Becerra - Initial work - dlina1502@gmail.com
+
