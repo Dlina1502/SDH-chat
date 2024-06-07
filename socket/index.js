@@ -1,6 +1,6 @@
-const {Server }= require("socket.io");
+const { Server } = require("socket.io");
 
-const io = new Server({ cors: "http://localhost:3000"});
+const io = new Server({ cors: "http://localhost:3000" });
 
 let onlineUsers = []
 
@@ -12,11 +12,17 @@ io.on("connection", (socket) => {
     // });
 
     socket.on("addNewUser", (userId) => {
-        usersChats.push({
-            userId,
-            socketId: socket.id
-        });
+        !onlineUsers.some((user) => user.userId === userId) &&
+            onlineUsers.push({
+                userId,
+                socketId: socket.id
+            });
+        console.log("onlineUsers", onlineUsers);
+
+        io.emit("onlineUsers", onlineUsers);
     });
-}); 
+
+
+});
 
 io.listen(3001);

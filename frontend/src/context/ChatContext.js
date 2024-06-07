@@ -9,8 +9,8 @@ export const ChatProvider = ({ children, user }) => {
     // const [messages, setMessages] = useState([]);
     const [userChats, setUserChats] = useState(null);
     const [isUserChatsLoading, setIsUserChatsLoading] = useState(false);
-    // eslint-disable-next-line
     const [socket, setSocket] = useState(null);
+    const [onlineUsers, setOnlineUsers] = useState([]);
 
     useEffect(() => {
         const newSocket = io('http://localhost:3001');
@@ -19,6 +19,14 @@ export const ChatProvider = ({ children, user }) => {
         return () => newSocket.disconnect();
     }, [user]);
 
+    useEffect(() => {
+        if (socket) {
+            socket.emit('addNewUser', user?._id);
+            socket.on('getOnlineUsers', (res) => {
+                setOnlineUsers(res);
+            });
+        }
+    }, [socket, user]);
 
     useEffect(() => {
         const fetchUserChats = async () => {
@@ -45,7 +53,7 @@ export const ChatProvider = ({ children, user }) => {
     // };
 
     return (
-        <ChatContext.Provider value={{userChats, isUserChatsLoading}}>
+        <ChatContext.Provider value={{userChats, isUserChatsLoading, onlineUsers}}>
             {children}
         </ChatContext.Provider>
     );
